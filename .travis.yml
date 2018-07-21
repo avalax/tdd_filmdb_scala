@@ -2,8 +2,7 @@ language: scala
 scala:
   - 2.12.6
 script:
-  - sbt clean coverage test coverageReport &&
-    sbt coverageAggregate
+  - sbt clean coverage test coverageReport && coverageAggregate
 after_success: 
   - sbt coverageReport coveralls  
 cache:
