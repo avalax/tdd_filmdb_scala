@@ -1,4 +1,4 @@
-name := """tdd_"""
+name := """tdd_filmdb"""
 organization := "de.avlaax"
 
 version := "1.0-SNAPSHOT"
