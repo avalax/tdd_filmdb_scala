@@ -1,0 +1,25 @@
+.ui-datepicker-calendar {
+   display: none;
+}
+.ui-datepicker-month {
+   display: none;
+}
+.ui-datepicker-next,.ui-datepicker-prev {
+  display:none;
+}
+.hideOverflow
+{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:85%;
+    display:inline-block;
+}
+.hideOverflowFull
+{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:100%;
+    display:inline-block;
+}
