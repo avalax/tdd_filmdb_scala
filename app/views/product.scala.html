@@ -1,0 +1,15 @@
+@(film: Film)
+
+@main("Film"){
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="active">@film.name</li>
+    </ol>
+}{
+    <div class="panel panel-default">
+        <div class="panel-heading hideOverflowFull">@film.name</div>
+        <div class="panel-body">
+            @form(film)
+        </div>
+    </div>
+}
