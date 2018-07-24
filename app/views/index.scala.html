@@ -1,4 +1,4 @@
-@(films: List[Film])
+@(films: List[Film])(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
 
 @main("Film list"){
     <ol class="breadcrumb">
@@ -13,8 +13,8 @@
         <ul class="list-group">
             @for(film <- films) {
                 <li class="list-group-item">
-                    <a href="/film/@film.id.id" class="btn btn-danger js-delete badge">Delete</a>
-                    <a class="hideOverflow" href="/film/@film.id.id">@film.name</a>
+                    <a href="/film/@film.id" class="btn btn-danger js-delete badge">Delete</a>
+                    <a class="hideOverflow" href="/film/@film.id">@film.name</a>
                     @for(i <- 0 to film.rating) {
                       <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     }
@@ -22,7 +22,7 @@
             }
         </ul>
         <div class="panel-footer">
-            @form(null)
+            <a href="/film">new film</a>
         </div>
     </div>
 }

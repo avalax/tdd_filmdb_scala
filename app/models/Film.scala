@@ -1,12 +1,14 @@
 package models
 
-case class Film (id: FilmId, name: String, genre: String, rating: Int, year: Int)
+case class Film (id: Long, name: String, genre: String, rating: Int, year: Int)
 
 object Film {
     var films = Set(
-        Film(FilmId(1),"film1","action",2,2018)
+        Film(1,"film1","action",2,2018),
+        Film(2,"film2","action",3,2016)
     )
 
-    def findAll = films.toList.sortBy(_.id.id)
-    def findById(id: FilmId) = films.find(_.id == id)
+    def findAll = films.toList.sortBy(_.id)
+    def findById(id: Long) = films.find(_.id == id)
+    def add(film: Film) = films = films + film
 }

@@ -1,15 +1,15 @@
-@(film: Film)
+@(filmForm: Form[Film])(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
 
 @main("Film"){
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
-        <li class="active">@film.name</li>
+        <li class="active">@filmForm("name").value</li>
     </ol>
 }{
     <div class="panel panel-default">
-        <div class="panel-heading hideOverflowFull">@film.name</div>
+        <div class="panel-heading hideOverflowFull">@filmForm("name").value</div>
         <div class="panel-body">
-            @form(film)
+            @form(filmForm)
         </div>
     </div>
 }
