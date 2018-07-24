@@ -1,0 +1,25 @@
+<form action="/film" method="post">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input required name="name" type="text" class="form-control" id="name" placeholder="Name" maxlength="254" value="">
+    </div>
+    <div class="form-group">
+        <label for="genre">Genre</label>
+        <input required name="genre" type="text" class="form-control" id="genre" placeholder="Genre" maxlength="254" value="">
+    </div>
+
+    <div class="form-group">
+        <label for="year">Year</label>
+        <input required pattern="[0-9]*" name="year" class="form-control js-year" id="year" placeholder="Year" value="">
+    </div>
+
+    <div class="form-group">
+        <label for="rating">Rating</label>
+        <select id="rating" required type="radio" name="rating" class="form-control">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

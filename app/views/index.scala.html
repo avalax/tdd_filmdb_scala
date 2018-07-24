@@ -1,9 +1,28 @@
-@()
+@(films: List[Film])
 
 @main("Film list"){
     <ol class="breadcrumb">
         <li class="active">Home</li>
     </ol>
 }{
-    <h1>Welcome to Play!</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">tdd_filmdb</div>
+        <div class="panel-body">
+            <p>Overview of all films</p>
+        </div>
+        <ul class="list-group">
+            @for(film <- films) {
+                <li class="list-group-item">
+                    <a href="/film/@film.id.id" class="btn btn-danger js-delete badge">Delete</a>
+                    <a class="hideOverflow" href="/film/${film.id.id}">@film.name</a>
+                    @for(i <- 0 to film.rating) {
+                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    }
+                </li>
+            }
+        </ul>
+        <div class="panel-footer">
+            @form()
+        </div>
+    </div>
 }
