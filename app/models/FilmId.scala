@@ -1,5 +1,3 @@
 package models
 
-class FilmId {
-
-}
+case class FilmId(id: Long)
