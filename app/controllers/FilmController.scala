@@ -1,18 +1,18 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.Film
+import models.{Film, FilmRepository}
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, nonEmptyText, number}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{AbstractController, ControllerComponents, Flash}
 
 @Singleton
-class FilmController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
 
   val filmForm = Form(
     mapping(
-      "id" -> longNumber.verifying("al", Film.findById(_).isEmpty),
+      "id" -> longNumber,
       "name" -> nonEmptyText,
       "genre" -> nonEmptyText,
       "rating" -> number(1, 3),

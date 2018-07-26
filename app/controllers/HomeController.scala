@@ -1,15 +1,18 @@
 package controllers
 
 import javax.inject._
-import models.Film
+import models.FilmRepository
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 
-@Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+import scala.concurrent.ExecutionContext
 
-  def index() = Action { implicit request =>
-    val films = Film.findAll
-    Ok(views.html.index(films))
+@Singleton
+class HomeController @Inject()(repo: FilmRepository, cc: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
+
+  def index() = Action.async { implicit request =>
+    repo.list().map { films =>
+      Ok(views.html.index(films))
+    }
   }
 }

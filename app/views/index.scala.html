@@ -1,4 +1,4 @@
-@(films: List[Film])(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
+@(films: Seq[Film])(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
 
 @main("Film list"){
     <ol class="breadcrumb">

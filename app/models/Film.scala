@@ -8,7 +8,6 @@ object Film {
         Film(2,"film2","action",3,2016)
     )
 
-    def findAll = films.toList.sortBy(_.id)
     def findById(id: Long) = films.find(_.id == id)
     def add(film: Film) = films = films + film
 }
