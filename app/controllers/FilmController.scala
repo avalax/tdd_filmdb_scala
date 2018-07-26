@@ -7,8 +7,10 @@ import play.api.data.Forms.{longNumber, mapping, nonEmptyText, number}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{AbstractController, ControllerComponents, Flash}
 
+import scala.concurrent.ExecutionContext
+
 @Singleton
-class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
 
   val filmForm = Form(
     mapping(
@@ -20,13 +22,14 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents) e
     )(Film.apply)(Film.unapply)
   )
 
-  def show(id: Long) = Action { implicit request =>
-    Film.findById(id).map(film =>
-      Ok(views.html.product(filmForm.fill(film)))
-    ).getOrElse(NotFound)
+  def show(id: Long) = Action.async { implicit request =>
+    repo.findById(id).map {
+      case Some(f) => Ok(views.html.product(filmForm.fill(f)))
+      case None => NotFound
+    }
   }
 
-  def newFilm = Action { implicit request =>
+  def create = Action { implicit request =>
     val form = if (request2flash.get("error").isDefined)
       filmForm.bind(request2flash.data)
     else
@@ -39,17 +42,23 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents) e
 
     newFilmForm.fold(
       hasErrors = { form =>
-        Redirect(routes.FilmController.newFilm()).
+        Redirect(routes.FilmController.create()).
           flashing(Flash(form.data) +
             ("error" -> form.errors.mkString(", ")))
       },
 
       success = { newFilm =>
-        Film.add(newFilm)
-        Redirect(routes.FilmController.show(newFilm.id)).
+        repo.save(newFilm)
+        //TODO: Redirect to film instead, using the new id from save: repo.save(newFilm).map( film => Redirect...)
+        Redirect(routes.HomeController.index()).
           flashing("success" -> Messages("Success"))
       }
     )
+  }
 
+  def delete(id: Long) = Action { implicit request =>
+    repo.delete(id)
+    Redirect(routes.HomeController.index())
+      .flashing("success" -> Messages("film deleted"))
   }
 }

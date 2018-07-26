@@ -27,9 +27,26 @@ class FilmRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
     def * = (id, name, genre, rating, year) <> ((Film.apply _).tupled, Film.unapply)
   }
 
-  private val film = TableQuery[FilmTable]
+  private val films = TableQuery[FilmTable]
 
   def list(): Future[Seq[Film]] = db.run {
-    film.result
+    films.result
+  }
+
+  def findById(id: Long): Future[Option[Film]] = db.run {
+    films.filter(_.id === id).result.headOption
+  }
+
+  def delete(id: Long) = db.run {
+    films.filter(_.id === id).delete
+  }
+
+  def save(film: Film) = db.run {
+    //TODO: include update here
+    films += film
+  }
+
+  private def update(film: Film): Future[Int] = db.run {
+    films.filter(_.id === film.id).update(film)
   }
 }
