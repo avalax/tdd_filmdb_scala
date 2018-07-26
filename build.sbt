@@ -1,5 +1,5 @@
 name := """tdd_filmdb"""
-organization := "de.avlaax"
+organization := "de.avalax"
 
 version := "1.0-SNAPSHOT"
 
@@ -8,13 +8,12 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.12.6"
 
 libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
-libraryDependencies += "com.h2database" % "h2" % "1.4.192"
+libraryDependencies += "com.typesafe.play" %% "play-slick" % "3.0.3"
+libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "3.0.3"
 
-libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-slick" % "3.0.1",
-  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.1"
-)
+libraryDependencies += "com.h2database" % "h2" % "1.4.197"
+
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
 
 coverageExcludedPackages := """controllers\..*Reverse.*;router.Routes.*;views\..*"""
 
