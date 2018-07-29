@@ -5,7 +5,7 @@ import models.{Film, FilmForm, FilmRepository}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, number}
 import play.api.i18n.{I18nSupport, Messages}
-import play.api.mvc.{AbstractController, ControllerComponents, Flash}
+import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -53,8 +53,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
 
     newFilmForm.fold(
       hasErrors = { form =>
-        Future.successful(Ok(views.html.product(form, id))
-          .flashing(Flash(form.data) + ("error" -> form.errors.mkString(", "))))
+        Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"), id)))
       },
 
       success = { newFilm =>
@@ -68,8 +67,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
 
   def delete(id: Long) = Action.async { implicit request =>
     repo.delete(id).map(_ =>
-      Redirect(routes.HomeController.index())
-        .flashing("success" -> Messages("film deleted"))
+      Ok
     )
   }
 }

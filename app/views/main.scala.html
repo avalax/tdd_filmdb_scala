@@ -16,17 +16,14 @@
     @breadcrumb
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 hidden-sm"></div>
-            <div class="col-md-8 col-sm-12">
+            <div class="col-md-1 hidden-sm"></div>
+            <div class="col-md-10 col-sm-12">
+                @if(flash.get("success").isDefined) {
+                    <div class="alert alert-success">@flash.get("success")</div>
+                }
                 @content
             </div>
         </div>
-        @if(flash.get("success").isDefined) {
-            <div class="alert alert-success">@flash.get("success")</div>
-        }
-        @if(flash.get("error").isDefined) {
-            <div class="alert alert-error">@flash.get("error")</div>
-        }
     </div>
     <script src="@routes.Assets.versioned("javascripts/jquery-3.2.1.min.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/jquery-ui.min.js")" type="text/javascript"></script>

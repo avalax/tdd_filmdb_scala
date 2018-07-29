@@ -1,4 +1,6 @@
-@(filmForm: Form[FilmForm], id: Long = 0L)(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
+@(filmForm: Form[FilmForm], id: Long = 0L, ratingOptions: List[(String, String)] = List("1" -> "1", "2" -> "2", "3" -> "3"))(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
+
+@import helper._
 
 @main("Film"){
     <ol class="breadcrumb">
@@ -6,10 +8,34 @@
         <li class="active">@filmForm("name").value</li>
     </ol>
 }{
+    @if(filmForm.hasGlobalErrors) {
+    <div class="alert alert-danger">
+        @for(error <- filmForm.globalErrors) {
+            @error.format
+        }
+    </div>
+    }
+
     <div class="panel panel-default">
         <div class="panel-heading hideOverflowFull">@filmForm("name").value</div>
         <div class="panel-body">
-            @form(filmForm, id)
+            @helper.form(action = routes.FilmController.save(id)) {
+                <div class="form-group">
+                    @helper.inputText(filmForm("name"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Name")
+                </div>
+                <div class="form-group">
+                    @helper.inputText(filmForm("genre"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Genre")
+                </div>
+
+                <div class="form-group">
+                    @helper.inputText(filmForm("year"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Year")
+                </div>
+
+                <div class="form-group">
+                    @helper.select(filmForm("rating"), ratingOptions, 'class -> "form-control")
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            }
         </div>
     </div>
 }
