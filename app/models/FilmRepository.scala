@@ -42,6 +42,6 @@ class FilmRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   }
 
   def save(film: Film) = db.run {
-    films.insertOrUpdate(film)
+    (films returning films.map(_.id)).insertOrUpdate(film)
   }
 }
