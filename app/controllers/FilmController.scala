@@ -22,11 +22,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
   )
 
   def newForm = Action { implicit request =>
-    val form = if (request2flash.get("error").isDefined)
-      filmForm.bind(request2flash.data)
-    else
-      filmForm
-    Ok(views.html.product(form))
+    Ok(views.html.product(filmForm))
   }
 
   def show(id: Long) = Action.async { implicit request =>
@@ -49,9 +45,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
       Film(id, form.name, form.genre, form.rating, form.year)
     }
 
-    val newFilmForm = filmForm.bindFromRequest()
-
-    newFilmForm.fold(
+    filmForm.bindFromRequest().fold(
       hasErrors = { form =>
         Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"), id)))
       },
