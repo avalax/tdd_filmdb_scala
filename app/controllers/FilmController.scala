@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.FilmForm.createForm
+import models.FilmForm.{createFilm, createForm}
 import models.{FilmForm, FilmRepository}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, number}
@@ -48,6 +48,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
       },
 
       success = { newFilm =>
+        repo.save(createFilm(newFilm, id))
         //TODO: Redirect to film instead, using the new id from save: repo.save(newFilm).map( film => Redirect...)
         Redirect(routes.HomeController.index()).
           flashing("success" -> Messages("Success"))
