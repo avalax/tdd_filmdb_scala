@@ -1,4 +1,4 @@
-@(filmForm: Form[Film])(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
+@(filmForm: Form[FilmForm], id: Long = 0L)(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
 
 @main("Film"){
     <ol class="breadcrumb">
@@ -9,7 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading hideOverflowFull">@filmForm("name").value</div>
         <div class="panel-body">
-            @form(filmForm)
+            @form(filmForm, id)
         </div>
     </div>
 }

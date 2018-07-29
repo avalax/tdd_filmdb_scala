@@ -1,12 +1,9 @@
-@(filmForm: Form[Film], ratingOptions: List[(String, String)] = List("1" -> "1", "2" -> "2", "3" -> "3")
+@(filmForm: Form[FilmForm], id: Long = 0L, ratingOptions: List[(String, String)] = List("1" -> "1", "2" -> "2", "3" -> "3")
 )(implicit request: RequestHeader, messagesProvider: MessagesProvider)
 
 @import helper._
 
-@helper.form(action = routes.FilmController.save()) {
-    <div class="form-group">
-        @helper.inputText(filmForm("id"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Id")
-    </div>
+@helper.form(action = routes.FilmController.save(id)) {
     <div class="form-group">
         @helper.inputText(filmForm("name"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Name")
     </div>

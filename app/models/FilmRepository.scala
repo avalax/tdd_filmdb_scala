@@ -42,11 +42,6 @@ class FilmRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   }
 
   def save(film: Film) = db.run {
-    //TODO: include update here
-    films += film
-  }
-
-  private def update(film: Film): Future[Int] = db.run {
-    films.filter(_.id === film.id).update(film)
+    films.insertOrUpdate(film)
   }
 }
