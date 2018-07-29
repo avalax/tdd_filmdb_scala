@@ -60,8 +60,6 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
   }
 
   def delete(id: Long) = Action.async { implicit request =>
-    repo.delete(id).map(_ =>
-      Ok
-    )
+    repo.delete(id).map(_ => Ok)
   }
 }
