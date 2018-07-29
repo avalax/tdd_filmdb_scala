@@ -21,6 +21,14 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
     )(FilmForm.apply)(FilmForm.unapply)
   )
 
+  def newForm = Action { implicit request =>
+    val form = if (request2flash.get("error").isDefined)
+      filmForm.bind(request2flash.data)
+    else
+      filmForm
+    Ok(views.html.product(form))
+  }
+
   def show(id: Long) = Action.async { implicit request =>
     def createForm(film: Film) = {
       FilmForm(film.name, film.genre, film.rating, film.year)
@@ -30,14 +38,6 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
       case Some(f) => Ok(views.html.product(filmForm.fill(createForm(f)), id))
       case None => NotFound
     }
-  }
-
-  def newForm = Action { implicit request =>
-    val form = if (request2flash.get("error").isDefined)
-      filmForm.bind(request2flash.data)
-    else
-      filmForm
-    Ok(views.html.product(form))
   }
 
   def save(id: Long) = Action.async { implicit request =>
@@ -66,9 +66,10 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
-    repo.delete(id)
-    Redirect(routes.HomeController.index())
-      .flashing("success" -> Messages("film deleted"))
+  def delete(id: Long) = Action.async { implicit request =>
+    repo.delete(id).map(_ =>
+      Redirect(routes.HomeController.index())
+        .flashing("success" -> Messages("film deleted"))
+    )
   }
 }
