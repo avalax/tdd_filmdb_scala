@@ -36,7 +36,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
     }
   }
 
-  def save(id: Long) = Action.async { implicit request =>
+  def update(id: Long) = Action.async { implicit request =>
     def idOfFilm(insertedId: Option[Long]) = {
       insertedId.getOrElse(id)
     }
@@ -45,9 +45,39 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
       Film(id, form.name, form.genre, form.rating, form.year)
     }
 
+    def validateAndSave = {
+      filmForm.bindFromRequest().fold(
+        hasErrors = { form =>
+          Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"), id)))
+        },
+
+        success = { newFilm =>
+          repo.save(createFilm(newFilm)).map(insertedId =>
+            Redirect(routes.FilmController.show(idOfFilm(insertedId)))
+              .flashing("success" -> Messages("Success"))
+          )
+        }
+      )
+    }
+
+    repo.findById(id).flatMap {
+      case Some(_) => validateAndSave
+      case None => Future.successful(NotFound)
+    }
+  }
+
+  def save = Action.async { implicit request =>
+    def idOfFilm(insertedId: Option[Long]) = {
+      insertedId.get
+    }
+
+    def createFilm(form: FilmForm) = {
+      Film(0L, form.name, form.genre, form.rating, form.year)
+    }
+
     filmForm.bindFromRequest().fold(
       hasErrors = { form =>
-        Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"), id)))
+        Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"))))
       },
 
       success = { newFilm =>
@@ -60,6 +90,9 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
   }
 
   def delete(id: Long) = Action.async { implicit request =>
-    repo.delete(id).map(_ => Ok)
+    repo.findById(id).flatMap {
+      case Some(_) => repo.delete(id).map(_ => Ok)
+      case None => Future.successful(NotFound)
+    }
   }
 }

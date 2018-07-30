@@ -6,6 +6,7 @@ import play.api.test._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import scala.language.postfixOps
 
 class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
   def addFilmToRepo(repo: FilmRepository, name: String = "anyName", genre: String = "anyGenre", year: Int = 2018, rating: Int = 3) = {
@@ -82,6 +83,41 @@ class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with In
       films.head.rating mustEqual 1
 
       repo.delete(films.head.id)
+    }
+
+    "delete Film from repository" in {
+      val repo = inject[FilmRepository]
+
+      val id = addFilmToRepo(repo)
+
+      val request = FakeRequest(DELETE, "/film/" + id)
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe OK
+      val films = Await.result(repo.list(), Duration.Inf)
+      films must have size 0
+    }
+
+    "unknown Film should result into PageNotFound" in {
+      val request = FakeRequest(GET, "/film/404")
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe NOT_FOUND
+    }
+
+    "modify unknown Film should result into PageNotFound" in {
+      val request = FakeRequest(POST, "/film/404")
+        .withFormUrlEncodedBody(("name", "unknownFilmName"))
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe NOT_FOUND
+    }
+
+    "delete unknown Film should result into PageNotFound" in {
+      val request = FakeRequest(DELETE, "/film/404")
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe NOT_FOUND
     }
   }
 }

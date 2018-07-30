@@ -19,7 +19,7 @@
     <div class="panel panel-default">
         <div class="panel-heading hideOverflowFull">@filmForm("name").value</div>
         <div class="panel-body">
-            @helper.form(action = routes.FilmController.save(id)) {
+            @helper.form(action = routes.FilmController.update(id)) {
                 <div class="form-group">
                     @helper.inputText(filmForm("name"), 'class -> "form-control", 'maxlength -> "254", 'placeholder -> "Name")
                 </div>

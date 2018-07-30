@@ -1,7 +1,7 @@
 GET     /                           controllers.HomeController.index
 GET     /film/:id                   controllers.FilmController.show(id: Long)
-POST    /film/:id                   controllers.FilmController.save(id: Long)
-POST    /film                       controllers.FilmController.save(id: Long = 0L)
+POST    /film/:id                   controllers.FilmController.update(id: Long)
+POST    /film                       controllers.FilmController.save
 GET     /film                       controllers.FilmController.newForm
 DELETE  /film/:id                   controllers.FilmController.delete(id: Long)
 
