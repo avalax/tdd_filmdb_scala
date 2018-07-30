@@ -10,7 +10,7 @@ import scala.language.postfixOps
 
 class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
   def addFilmToRepo(repo: FilmRepository, name: String = "anyName", genre: String = "anyGenre", year: Int = 2018, rating: Int = 3) = {
-    Await.result(repo.save(Film(0L, name, genre, year, rating)), Duration.Inf).get
+    Await.result(repo.save(Film(0L, name, genre, rating, year)), Duration.Inf).get
   }
 
   "Acceptance Tests" should {
@@ -48,6 +48,15 @@ class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with In
       repo.delete(id)
     }
 
+    "show new film form" in {
+      val request = FakeRequest(GET, "/film")
+      val home = route(app, request).get
+
+      status(home) mustBe OK
+      contentType(home) mustBe Some("text/html")
+      contentAsString(home) must include("form")
+    }
+
     "add new film to repository" in {
       val repo = inject[FilmRepository]
       val request = FakeRequest(POST, "/film")
@@ -63,6 +72,20 @@ class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with In
       films.head.rating mustEqual 2
 
       repo.delete(films.head.id)
+    }
+
+    "validation error during add Film from repository" in {
+      val repo = inject[FilmRepository]
+
+      val request = FakeRequest(POST, "/film")
+        .withFormUrlEncodedBody(("year", "invalid year"), ("rating", "99"))
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe OK
+      val films = Await.result(repo.list(), Duration.Inf)
+      films must have size 0
+      contentType(filmRoute) mustBe Some("text/html")
+      contentAsString(filmRoute) must include("error.check.form")
     }
 
     "modify Film from repository" in {
@@ -81,6 +104,28 @@ class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with In
       films.head.genre mustEqual "newGenreName"
       films.head.year mustEqual 1999
       films.head.rating mustEqual 1
+
+      repo.delete(films.head.id)
+    }
+
+    "validation error during modify Film from repository" in {
+      val repo = inject[FilmRepository]
+
+      val id = addFilmToRepo(repo, "oldFilmName", "oldGenreName", 2018, 2)
+
+      val request = FakeRequest(POST, "/film/" + id)
+        .withFormUrlEncodedBody(("year", "invalid year"), ("rating", "99"))
+      val filmRoute = route(app, request).get
+
+      status(filmRoute) mustBe OK
+      val films = Await.result(repo.list(), Duration.Inf)
+      films must have size 1
+      films.head.name mustEqual "oldFilmName"
+      films.head.genre mustEqual "oldGenreName"
+      films.head.year mustEqual 2018
+      films.head.rating mustEqual 2
+      contentType(filmRoute) mustBe Some("text/html")
+      contentAsString(filmRoute) must include("error.check.form")
 
       repo.delete(films.head.id)
     }
