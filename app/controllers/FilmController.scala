@@ -27,13 +27,13 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)(i
   }
 
   def show(id: Long) = Action.async { implicit request =>
+    def formFromFilm(film: Film) = {
+      FilmForm(film.name, film.genre, film.rating, film.year)
+    }
+    
     repo.findById(id).map {
       case Some(f) => Ok(views.html.product(filmForm.fill(formFromFilm(f)), id))
       case None => NotFound
-    }
-
-    def formFromFilm(film: Film) = {
-      FilmForm(film.name, film.genre, film.rating, film.year)
     }
   }
 
