@@ -18,7 +18,7 @@ libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2
 coverageExcludedPackages := """controllers\..*Reverse.*;router.Routes.*;views\..*"""
 
 // Adds additional packages into Twirl
-//TwirlKeys.templateImports += "de.avlaax.controllers._"
+//TwirlKeys.templateImports += "de.avalax.controllers._"
 
 // Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "de.avlaax.binders._"
+// play.sbt.routes.RoutesKeys.routesImport += "de.avalax.binders._"
