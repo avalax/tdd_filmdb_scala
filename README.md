@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.org/avalax/tdd_filmdb_scala.svg?branch=master)](https://travis-ci.org/avalax/tdd_filmdb_scala) [![Coverage Status](https://coveralls.io/repos/github/avalax/tdd_filmdb_scala/badge.svg)](https://coveralls.io/github/avalax/tdd_filmdb_scala)
+[![Build Status](https://travis-ci.org/avalax/tdd_filmdb_scala.svg?branch=master)](https://travis-ci.org/avalax/tdd_filmdb_scala) [![Coverage Status](https://coveralls.io/repos/github/avalax/tdd_filmdb_scala/badge.svg)](https://coveralls.io/github/avalax/tdd_filmdb_scala) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a8e7ca99f3774747914ac6a517714c42)](https://www.codacy.com/project/avalax/tdd_filmdb_scala/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=avalax/tdd_filmdb_scala&amp;utm_campaign=Badge_Grade_Dashboard)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://tdd-filmdb-scala.herokuapp.com/)

@@ -9,8 +9,9 @@ import scala.concurrent.duration.Duration
 import scala.language.postfixOps
 
 class ApplicationAcceptanceSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
-  def addFilmToRepo(repo: FilmRepository, name: String = "anyName", genre: String = "anyGenre", year: Int = 2018, rating: Int = 3) = {
-    Await.result(repo.save(Film(0L, name, genre, rating, year)), Duration.Inf).get
+  private def addFilmToRepo(
+                             repo: FilmRepository, name: String = "anyName", genre: String = "anyGenre", year: Int = 1, rating: Int = 3) = {
+    Await.result(repo.save(Film(0L, name, genre, rating, year)), Duration.Inf)
   }
 
   "Acceptance Tests" should {
