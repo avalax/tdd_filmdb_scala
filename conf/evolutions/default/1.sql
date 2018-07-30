@@ -7,8 +7,6 @@ CREATE TABLE "films" (
     "year" long not null
 );
 
-INSERT INTO "films" VALUES (1, 'first film', 'action', 3, 2018);
-
 # --- !Downs
 
 DROP TABLE IF EXISTS films;
