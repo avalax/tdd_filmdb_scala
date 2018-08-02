@@ -1,9 +1,9 @@
-name := """tdd_filmdb"""
+name := "tdd_filmdb"
 organization := "de.avalax"
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val tdd_filmdb = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.6"
 
