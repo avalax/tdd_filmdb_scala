@@ -1,8 +1,8 @@
-@(filmForm: Form[FilmForm], id: Long = 0L, ratingOptions: List[(String, String)] = List("1" -> "1", "2" -> "2", "3" -> "3"))(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
+@(state: play.api.libs.json.JsValue, filmForm: Form[FilmForm], id: Long = 0L, ratingOptions: List[(String, String)] = List("1" -> "1", "2" -> "2", "3" -> "3"))(implicit request: RequestHeader, messagesProvider: MessagesProvider, flash: Flash)
 
 
 
-@main("Film") {
+@main(state, "Film") {
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
         <li class="active">@filmForm("name").value</li>

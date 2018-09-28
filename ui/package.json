@@ -6,7 +6,8 @@
   "main": "index.js",
   "dependencies": {
     "hyperapp": "^1.2.9",
-    "hyperapp-redux-devtools": "^1.1.6"
+    "hyperapp-redux-devtools": "^1.1.6",
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -20,7 +21,9 @@
   },
   "watch": {
     "build-dev": {
-      "patterns": ["src"],
+      "patterns": [
+        "src"
+      ],
       "extensions": "js,jsx",
       "quiet": false,
       "legacyWatch": true,

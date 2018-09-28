@@ -5,6 +5,7 @@ import models.{Film, FilmForm, FilmRepository}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, number}
 import play.api.i18n.{I18nSupport, Messages, MessagesProvider}
+import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -13,6 +14,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)
                               (implicit ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
+
+  implicit val productPageFormat: OFormat[Film] = Json.format[Film]
 
   val filmForm = Form(
     mapping(
@@ -23,8 +26,14 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)
     )(FilmForm.apply)(FilmForm.unapply)
   )
 
+  def index: Action[AnyContent] = Action.async { implicit request =>
+    repo.list().map { films =>
+      Ok(Json.toJson(films))
+    }
+  }
+
   def newForm: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.product(filmForm))
+    Ok(views.html.product(Json.toJson(""), filmForm))
   }
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
@@ -33,7 +42,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)
     }
 
     repo.findById(id).map {
-      case Some(f) => Ok(views.html.product(filmForm.fill(formFromFilm(f)), id))
+      case Some(f) => Ok(views.html.product(Json.toJson(""),filmForm.fill(formFromFilm(f)), id))
       case None => NotFound
     }
   }
@@ -65,7 +74,7 @@ class FilmController @Inject()(repo: FilmRepository, cc: ControllerComponents)
 
     form.fold(
       hasErrors = { form =>
-        Future.successful(Ok(views.html.product(form.withGlobalError("error.check.form"), id)))
+        Future.successful(Ok(views.html.product(Json.toJson(""), form.withGlobalError("error.check.form"), id)))
       },
       success = { newFilm =>
         repo.save(filmFromForm(newFilm)).map(id =>
